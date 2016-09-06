@@ -1,0 +1,29 @@
+{
+  "name": "pubdir",
+  "version": "1.0.0",
+  "description": "A minimal HTTP file server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "pubdir": "bin/pubdir.js"
+  },
+  "keywords": ["fileserver", "http", "httpd"],
+  "author": "Retorillo",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/retorillo/pubdir.git"
+  },
+  "bugs": {
+    "url": "https://github.com/retorillo/pubdir/issues"
+  },
+  "homepage": "https://github.com/retorillo/pubdir#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "glob": "^7.0.6",
+    "gnu-option": "^1.0.0",
+    "pug": "^2.0.0-beta6"
+  }
+}

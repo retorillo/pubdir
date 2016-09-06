@@ -1,0 +1,38 @@
+doctype html
+head
+  title #{title}
+body
+  style(type='text/css').
+    * { font-family: -apple-system, BlinkMacSystemFont,
+      'Segoe UI', Roboto, Helvetica, Arial,
+      sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol';
+      text-align: left; }
+    .breadcrumbs a { color: #008822 }
+    .sep { padding: 0 0.1em; color: #445533; font-weight:normal }
+    td { padding-right: 2em; }
+    a { text-decoration: none; }
+    .file a { color: #220088 }
+    .dir a { color: #008822 }
+
+  h1(class='breadcrumbs')
+    each i in breadcrumbs
+      span(class='sep') /
+      if i.href != ''
+        a(href=i.href) #{i.text}
+      else
+        span #{i.text}
+
+  table
+    each i in items
+      tr(class=i.type)
+        if i.type == 'file'
+          td #{formatsize(i.size)}
+        else if i.size == 1
+          td #{i.size} item
+        else
+          td #{i.size} items
+        td #{formattime(i.mtime)}
+        th
+          a(href=i.href)
+            | #{i.basename}
