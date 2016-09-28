@@ -22,7 +22,7 @@ if (opt.$.length === 0)
 var published;
 function loadfiles() {
   var files = [], dirs = { };
-  var pending = { 
+  var pending = {
     files: files,
     dirs: dirs,
   }
@@ -37,7 +37,7 @@ function loadfiles() {
       return;
     for (var p of pathes) {
       var stat = fs.statSync(p);
-      
+
       if (stat.isFile())
         files.push(p);
 
@@ -82,8 +82,8 @@ function formatsize(size) {
   var c = 0;
   do {
     size /= kib;
-  } while (c+1 < unit.length 
-    && size >= kib 
+  } while (c+1 < unit.length
+    && size >= kib
     && ++c);
   return [size.toFixed(2), unit[c] + 'iB'].join(' ');
 }
@@ -97,9 +97,9 @@ function formattime(date) {
     && time >= timeunits[c+1][0]
     && ++c)
   var v = Math.ceil(time);
-  return [v, v <= 1 
-    ? timeunits[c][1] 
-    : (timeunits[c][2] 
+  return [v, v <= 1
+    ? timeunits[c][1]
+    : (timeunits[c][2]
       || timeunits[c][1] + 's'),
       'ago'].join(' ');
 }
@@ -113,7 +113,7 @@ function listdir(dir, res) {
     var idir = stat.isDirectory();
     items.push({
       basename: path.basename(f),
-      href: '/' + f,
+      href: '/' + encodeURI(f),
       fullname: '/' + f,
       size: idir ? published.dirs[f] : stat.size,
       atime: stat.atime,
@@ -150,7 +150,7 @@ function listdir(dir, res) {
 }
 
 function handler(req, res) {
-  var rel = req.path.substr(1);
+  var rel = decodeURI(req.path.substr(1));
   rel = rel.length === 0 ? '.' : rel;
   const NOT_FOUND = `${rel} is not found or not published`;
   var stat = fs.statSync(rel);
