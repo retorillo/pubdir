@@ -5,6 +5,7 @@ var app = express();
 var fs = require('fs');
 var glob = require('glob');
 var path = require('path');
+var os = require('os');
 var pug = require('pug');
 
 var renderlist = pug.compileFile(path.join(__dirname, 'list.pug'));
@@ -28,7 +29,16 @@ function loadfiles() {
   }
   published = published || pending;
 
-  var globpath = opt.$.join('|');
+  var globpath;
+  var globlist;
+  // NOTE: (Windows) Please only use forward-slashes in glob expressions
+  // https://github.com/isaacs/node-glob#windows
+  if (os.platform() === 'win32')
+    globlist = opt.$.map(p => { return p.replace(/\\/g, '/'); });
+  else
+    globlist = opt.$;
+  globpath = globlist.join('|')
+
   console.log(`[INFO] Globbing ${globpath} on ${process.cwd()}`);
   glob(globpath, {
       dot: opt.all,
@@ -36,8 +46,10 @@ function loadfiles() {
     if (err)
       return;
     for (var p of pathes) {
-      var stat = fs.statSync(p);
+      // NOTE: glob may return with Linux path seperator
+      p = p.replace(/\//g, path.sep);
 
+      var stat = fs.statSync(p);
       if (stat.isFile())
         files.push(p);
 
@@ -126,10 +138,10 @@ function listdir(dir, res) {
 
   var parent = path.dirname(dir);
 
-  var title = '/' + path.join(path.basename(process.cwd()), dir);
+  var title = path.sep + path.join(path.basename(process.cwd()), dir);
   var breadcrumbs = [ { href: '/' , text: path.basename(process.cwd()) } ];
   var bhref = [];
-  for (var c of dir === '.' ? [] : dir.split('/')) {
+  for (var c of dir === '.' ? [] : dir.split(path.sep)) {
     bhref.push('/', c);
     breadcrumbs.push({
       href: bhref.join(''),
@@ -152,6 +164,8 @@ function listdir(dir, res) {
 function handler(req, res) {
   var rel = decodeURI(req.path.substr(1));
   rel = rel.length === 0 ? '.' : rel;
+  rel = rel.replace(/\//g, path.sep);
+
   const NOT_FOUND = `${rel} is not found or not published`;
   var stat = fs.statSync(rel);
   if (rel !== '.' && !listable(rel))
@@ -179,7 +193,6 @@ function handler(req, res) {
   else
     throw new Error(NOT_FOUND);
 }
-
 
 app.get('*', (req, res, next) => {
   try {

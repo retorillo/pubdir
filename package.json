@@ -1,6 +1,6 @@
 {
   "name": "pubdir",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A minimal HTTP file server",
   "main": "index.js",
   "scripts": {
