@@ -16,7 +16,7 @@ npm install -g pubdir
 Expose all `*.mp4` files recursively at port 6000.
 
 ```bash
-pubdir -p 60000 **/*.mp4
+pubdir -p 6000 **/*.mp4
 ```
 
 - When `-p` or `--port` is not present, random port number is used by default.

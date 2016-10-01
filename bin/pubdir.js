@@ -162,16 +162,18 @@ function handler(req, res) {
     listdir(rel, res);
   }
   else if (stat.isFile()) {
-    console.log(`[FILE_START] ${rel}`);
+    console.log(`[FILE_REQUEST] ${rel}`);
     res.sendFile(rel, {
       root: process.cwd(),
     }, err => {
       if (err) {
-        console.log(`[FILE_ERROR] ${rel}`);
-        res.status(err.status).end();
+        if (err.code == 'ECONNABORTED')
+          console.log(`[FILE_ABORT] ${rel}`);
+        else
+          res.status(err.status).end();
       }
       else
-        console.log(`[FILE_SUCCESS] ${rel}`);
+        console.log(`[FILE_SENT] ${rel}`);
     });
   }
   else
