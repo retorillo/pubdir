@@ -125,7 +125,7 @@ function listdir(dir, res) {
     var idir = stat.isDirectory();
     items.push({
       basename: path.basename(f),
-      href: '/' + encodeURI(f),
+      href: '/' + f.split(path.sep).map(p => { return encodeURIComponent(p) }).join("/"),
       fullname: '/' + f,
       size: idir ? published.dirs[f] : stat.size,
       atime: stat.atime,
@@ -162,7 +162,7 @@ function listdir(dir, res) {
 }
 
 function handler(req, res) {
-  var rel = decodeURI(req.path.substr(1));
+  var rel = decodeURIComponent(req.path.substr(1));
   rel = rel.length === 0 ? '.' : rel;
   rel = rel.replace(/\//g, path.sep);
 
