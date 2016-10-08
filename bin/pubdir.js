@@ -157,7 +157,7 @@ function listdir(dir, res) {
     breadcrumbs: breadcrumbs,
     title: title,
     items: items,
-  }));
+  }), 'utf8');
   res.end();
 }
 
