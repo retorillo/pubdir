@@ -28,12 +28,12 @@ body
     each i in items
       tr(class=i.type)
         if i.type == 'file'
-          td #{formatsize(i.size)}
+          td #{formatSize(i.size)}
         else if i.size == 1
           td #{i.size} item
         else
           td #{i.size} items
-        td #{formattime(i.mtime)}
+        td #{formatTime(i.mtime)}
         th
           a(href=i.href)
             | #{i.basename}

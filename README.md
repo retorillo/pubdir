@@ -15,13 +15,18 @@ npm install -g pubdir
 
 Expose all `*.mp4` files recursively at port 6000.
 
+Note that glob pattern must be quoted to prevent bash expansion.
+
 ```bash
-pubdir -p 6000 **/*.mp4
+pubdir -p 6000 "**/*.mp4" --duration 30m
 ```
 
 - When `-p` or `--port` is not present, random port number is used by default.
 - When [glob](https://www.npmjs.com/package/glob) pattern is not
   present, `*` is used by default.
+- If want to run server temporaliy , specify `--duration` optionally.
+  Use `m` suffix to specify server alive duration by minutes. (`h` is hours,
+  `s` is seconds) If time-unit is not present, `m` is used by default.
 
 ## License
 
