@@ -2,6 +2,11 @@ var should = require('should');
 var spawn = require('child_process').spawn;
 var lib = require('../lib');
 
+describe('getStringBlocks', function() {
+  it ('split blocks', function() {
+    should(lib.getStringBlocks("123456abcdefg789")).eql(['123456', 'abcdefg', '789'])
+  });
+});
 describe('parseDuration', function() {
   it ('parse "5s"', function() {
     should(lib.parseDuration('5s')).eql(5 * 1000);
@@ -15,7 +20,7 @@ describe('duration', function(){
   it ('must close after 2 seconds', function() {
     this.timeout(5 * 1000);
     return new Promise(function(resolve, reject) {
-      var p = spawn('node', [ '../bin/pubdir.js', '--duration', '2s' ], {
+      var p = spawn('node', [ '../bin/cli.js', '--duration', '2s' ], {
         cwd: __dirname,
       });
       p.stdout.on('data', data => {

@@ -16,6 +16,75 @@ body
     .file a { color: #220088 }
     .dir a { color: #008822 }
 
+    ul.views:before {
+      content: "VIEWS: "
+    }
+    .views {
+      padding: 0px;
+    }
+    .views li {
+      display: inline-block;
+      list-style-type: none;
+      text-transform: uppercase;
+    }
+    .views li a {
+      font-weight: bold;
+    }
+    .views li:nth-child(n+2):before {
+      content: "|";
+      margin-right: 0.5em;
+      margin-left: 0.5em;
+    }
+    ul.sorts:before {
+      content: "SORTS: "
+    }
+    .sorts {
+      padding: 0px;
+    }
+    .sorts li {
+      display: inline-block;
+      list-style-type: none;
+      text-transform: uppercase;
+    }
+    .sorts li a {
+      font-weight: bold;
+    }
+    .sorts li:nth-child(n+2):before {
+      content: "|";
+      margin-right: 0.5em;
+      margin-left: 0.5em;
+    }
+
+    .tile {
+      margin: 5px;
+      display: inline-block; 
+      background: white;
+      float: left;
+      border: 1px solid #BFBFBF;
+      width: 256px;
+      height: 256px;
+      overflow: hidden;
+      white-space: nowrap;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+    .tile p {
+      font-size: 70%;
+      padding: 0.5em;
+      width: 100%;
+      margin: 0px;
+      display: block;
+      background: #333;
+      color: white;
+      opacity: 0.6;
+    }
+    .tile_dir {
+      background-color: #AFA;
+    }
+    .tile-dir p {
+      background: #150;
+    }
+
   h1(class='breadcrumbs')
     each i in breadcrumbs
       span(class='sep') /
@@ -24,16 +93,43 @@ body
       else
         span #{i.text}
 
-  table
-    each i in items
-      tr(class=i.type)
-        if i.type == 'file'
-          td #{formatSize(i.size)}
-        else if i.size == 1
-          td #{i.size} item
+  ul(class='views')
+    each i in views
+      li
+        if i.href != ''
+          a(href=i.href) #{i.text}
         else
-          td #{i.size} items
-        td #{formatTime(i.mtime)}
-        th
-          a(href=i.href)
-            | #{i.basename}
+          span #{i.text}
+
+  ul(class='sorts')
+    each i in sorts
+      li
+        if i.href != ''
+          a(href=i.href) #{i.text}
+        else
+          span #{i.text}
+
+  if !query.view || query.view == 'details' 
+    table
+      each i in items
+        tr(class=i.type)
+          if i.type == 'file'
+            td #{formatSize(i.size)}
+          else if i.size == 1
+            td #{i.size} item
+          else
+            td #{i.size} items
+          td #{formatTime(i.mtime)}
+          th
+            a(href=i.href)
+              | #{i.basename}
+  else if query.view == 'tiles'
+    each i in items
+      a(href=i.href)
+        if i.type == 'dir'
+          div(class='tile tile-dir' style='background-image:url("' + i.tileHref + '")')
+            p #{i.basename}
+        else
+          div(class='tile' style='background-image:url("' + i.tileHref + '")')
+            p #{i.basename}
+
