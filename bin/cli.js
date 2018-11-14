@@ -189,7 +189,7 @@ function handler_file(req, res) {
   }, err => {
     if (err) {
       if (err.code == 'ECONNABORTED')
-        console.log(`[FILE_ABORT] ${rel}`);
+        console.log(`[FILE_ABORT] ${localpath}`);
       else
         res.status(err.status).end();
     }
